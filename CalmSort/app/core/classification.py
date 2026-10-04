@@ -68,7 +68,6 @@ KEYWORD_CATEGORIES = {
         "exam",
         "semester",
         "lecture",
-        "notes",
         "lab",
         "practical",
         "dbms",
@@ -76,7 +75,6 @@ KEYWORD_CATEGORIES = {
         "python",
         "os",
         "operating-system",
-        "computer-network",
         "cn",
         "dsa",
         "data-structure",
@@ -148,7 +146,6 @@ CONTEXT_CATEGORIES = {
         "reports",
         "report",
         "documents",
-        "document",
     },
     "Personal": {
         "personal",
@@ -161,4 +158,62 @@ CONTEXT_CATEGORIES = {
         "photo",
         "memories",
     },
+}
+
+
+CONTENT_CATEGORIES = {
+    "College": {
+        "assignment",
+        "exam",
+        "semester",
+        "lecture",
+        "notes",
+        "lab",
+        "practical",
+        "dbms",
+        "java",
+        "python",
+        "operating system",
+        "computer network",
+        "data structure",
+        "algorithm",
+        "university",
+        "college",
+        "course",
+        "subject",
+    },
+    "Work": {
+        "invoice",
+        "meeting",
+        "client",
+        "project",
+        "report",
+        "proposal",
+        "presentation",
+        "salary",
+        "office",
+        "business",
+        "company",
+        "employee",
+        "deadline",
+    },
+    "Personal": {
+        "personal",
+        "family",
+        "travel",
+        "vacation",
+        "passport",
+        "insurance",
+        "medical",
+        "home",
+        "private",
+    },
+}
+
+
+CONTENT_EXTENSIONS = {
+    ".txt",
+    ".md",
+    ".csv",
+    ".rtf",
 }

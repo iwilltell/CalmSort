@@ -36,6 +36,8 @@ def test_pdf_document_classification():
     result = classifier.classify(file_info)
 
     assert result.category == "Documents"
+    assert result.file_type == "Documents"
+    assert result.context is None
     assert result.confidence == 20
     assert result.decision == "REVIEW"
 
@@ -51,6 +53,8 @@ def test_college_assignment_classification():
     result = classifier.classify(file_info)
 
     assert result.category == "College"
+    assert result.file_type == "Documents"
+    assert result.context == "College"
     assert result.confidence == 70
     assert result.decision == "AUTO"
 
@@ -66,6 +70,8 @@ def test_work_invoice_classification():
     result = classifier.classify(file_info)
 
     assert result.category == "Work"
+    assert result.file_type == "Documents"
+    assert result.context == "Work"
     assert result.confidence == 70
     assert result.decision == "AUTO"
 
@@ -81,6 +87,8 @@ def test_image_classification():
     result = classifier.classify(file_info)
 
     assert result.category == "Images"
+    assert result.file_type == "Images"
+    assert result.context is None
     assert result.confidence == 20
     assert result.decision == "REVIEW"
 
@@ -125,14 +133,19 @@ def test_college_folder_context():
     file_info = create_file_info(
         "chapter1.pdf",
         ".pdf",
-        Path("College") / "Semester 5" / "DBMS" / "chapter1.pdf",
+        Path("College")
+        / "Semester 5"
+        / "DBMS"
+        / "chapter1.pdf",
     )
 
     result = classifier.classify(file_info)
 
     assert result.category == "College"
+    assert result.file_type == "Documents"
+    assert result.context == "College"
     assert result.confidence == 90
-    assert result.margin == 70
+    assert result.margin == 90
     assert result.decision == "AUTO"
 
 
@@ -142,14 +155,18 @@ def test_work_folder_context():
     file_info = create_file_info(
         "document.pdf",
         ".pdf",
-        Path("Work") / "Client A" / "document.pdf",
+        Path("Work")
+        / "Client A"
+        / "document.pdf",
     )
 
     result = classifier.classify(file_info)
 
     assert result.category == "Work"
+    assert result.file_type == "Documents"
+    assert result.context == "Work"
     assert result.confidence == 60
-    assert result.margin == 40
+    assert result.margin == 60
     assert result.decision == "REVIEW"
 
 
@@ -159,14 +176,18 @@ def test_personal_folder_context():
     file_info = create_file_info(
         "photo.jpg",
         ".jpg",
-        Path("Personal") / "Travel" / "photo.jpg",
+        Path("Personal")
+        / "Travel"
+        / "photo.jpg",
     )
 
     result = classifier.classify(file_info)
 
     assert result.category == "Personal"
+    assert result.file_type == "Images"
+    assert result.context == "Personal"
     assert result.confidence == 60
-    assert result.margin == 40
+    assert result.margin == 60
     assert result.decision == "REVIEW"
 
 
@@ -176,7 +197,9 @@ def test_context_reason_is_recorded():
     file_info = create_file_info(
         "chapter1.pdf",
         ".pdf",
-        Path("College") / "DBMS" / "chapter1.pdf",
+        Path("College")
+        / "DBMS"
+        / "chapter1.pdf",
     )
 
     result = classifier.classify(file_info)
@@ -188,3 +211,128 @@ def test_context_reason_is_recorded():
 
     assert '"college" found in folder path' in descriptions
     assert '"dbms" found in folder path' in descriptions
+
+
+def test_college_content_classification(tmp_path: Path):
+    test_file = tmp_path / "chapter.txt"
+
+    test_file.write_text(
+        "This lecture discusses DBMS, "
+        "normalization, and database transactions.",
+        encoding="utf-8",
+    )
+
+    classifier = FileClassifier()
+
+    file_info = create_file_info(
+        "chapter.txt",
+        ".txt",
+        test_file,
+    )
+
+    result = classifier.classify(file_info)
+
+    assert result.category == "College"
+    assert result.file_type == "Documents"
+    assert result.context == "College"
+    assert result.confidence == 15
+    assert result.margin == 15
+    assert result.decision == "REVIEW"
+
+
+def test_work_content_classification(tmp_path: Path):
+    test_file = tmp_path / "notes.txt"
+
+    test_file.write_text(
+        "The client meeting discussed the project "
+        "deadline and final report.",
+        encoding="utf-8",
+    )
+
+    classifier = FileClassifier()
+
+    file_info = create_file_info(
+        "notes.txt",
+        ".txt",
+        test_file,
+    )
+
+    result = classifier.classify(file_info)
+
+    assert result.category == "Work"
+    assert result.file_type == "Documents"
+    assert result.context == "Work"
+    assert result.confidence == 15
+    assert result.margin == 15
+    assert result.decision == "REVIEW"
+
+
+def test_content_reason_is_recorded(tmp_path: Path):
+    test_file = tmp_path / "chapter.txt"
+
+    test_file.write_text(
+        "This lecture explains DBMS concepts.",
+        encoding="utf-8",
+    )
+
+    classifier = FileClassifier()
+
+    file_info = create_file_info(
+        "chapter.txt",
+        ".txt",
+        test_file,
+    )
+
+    result = classifier.classify(file_info)
+
+    content_reasons = [
+        reason
+        for reason in result.reasons
+        if reason.signal == "content"
+    ]
+
+    assert len(content_reasons) == 1
+    assert content_reasons[0].score == 15
+    assert "content contains" in content_reasons[0].description
+
+
+def test_content_score_is_only_applied_once_per_category(
+    tmp_path: Path,
+):
+    test_file = tmp_path / "chapter.txt"
+
+    test_file.write_text(
+        """
+        DBMS
+        assignment
+        semester
+        lecture
+        notes
+        university
+        college
+        """,
+        encoding="utf-8",
+    )
+
+    classifier = FileClassifier()
+
+    file_info = create_file_info(
+        "chapter.txt",
+        ".txt",
+        test_file,
+    )
+
+    result = classifier.classify(file_info)
+
+    assert result.category == "College"
+    assert result.file_type == "Documents"
+    assert result.context == "College"
+    assert result.confidence == 15
+
+    content_reasons = [
+        reason
+        for reason in result.reasons
+        if reason.signal == "content"
+    ]
+
+    assert len(content_reasons) == 1

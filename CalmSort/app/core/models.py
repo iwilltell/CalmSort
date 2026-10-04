@@ -11,3 +11,21 @@ class FileInfo:
     size: int
     created_at: datetime
     modified_at: datetime
+
+
+@dataclass
+class ClassificationReason:
+    signal: str
+    description: str
+    score: float
+
+
+@dataclass
+class ClassificationResult:
+    category: str
+    confidence: float
+    margin: float
+    decision: str
+    reasons: list[ClassificationReason]
+    file_type: str = ""
+    context: str | None = None
