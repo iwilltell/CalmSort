@@ -29,3 +29,19 @@ class ClassificationResult:
     reasons: list[ClassificationReason]
     file_type: str = ""
     context: str | None = None
+
+
+@dataclass
+class OrganizationAction:
+    source: Path
+    destination: Path
+    category: str
+    decision: str
+
+
+@dataclass
+class MoveRecord:
+    source: Path
+    destination: Path
+    category: str
+    moved_at: datetime
