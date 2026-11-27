@@ -1,0 +1,124 @@
+{
+    "Documents": {
+        "extensions": [
+            ".pdf",
+            ".doc",
+            ".docx",
+            ".txt",
+            ".rtf",
+            ".odt",
+            ".xls",
+            ".xlsx",
+            ".csv",
+            ".ppt",
+            ".pptx"
+        ],
+        "keywords": [
+            "report",
+            "assignment",
+            "resume",
+            "invoice",
+            "notes",
+            "syllabus"
+        ]
+    },
+    "Images": {
+        "extensions": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".bmp",
+            ".svg",
+            ".webp",
+            ".heic",
+            ".ico"
+        ],
+        "keywords": [
+            "screenshot",
+            "photo",
+            "wallpaper"
+        ]
+    },
+    "Videos": {
+        "extensions": [
+            ".mp4",
+            ".mkv",
+            ".avi",
+            ".mov",
+            ".wmv",
+            ".flv",
+            ".webm"
+        ],
+        "keywords": [
+            "recording",
+            "lecture",
+            "video"
+        ]
+    },
+    "Audio": {
+        "extensions": [
+            ".mp3",
+            ".wav",
+            ".aac",
+            ".flac",
+            ".ogg",
+            ".m4a"
+        ],
+        "keywords": [
+            "podcast",
+            "audio",
+            "song"
+        ]
+    },
+    "Code": {
+        "extensions": [
+            ".py",
+            ".java",
+            ".c",
+            ".cpp",
+            ".js",
+            ".ts",
+            ".html",
+            ".css",
+            ".json",
+            ".xml",
+            ".sql",
+            ".sh",
+            ".ipynb"
+        ],
+        "keywords": [
+            "script",
+            "source"
+        ]
+    },
+    "Archives": {
+        "extensions": [
+            ".zip",
+            ".rar",
+            ".7z",
+            ".tar",
+            ".gz",
+            ".iso"
+        ],
+        "keywords": [
+            "backup",
+            "archive"
+        ]
+    },
+    "Installers": {
+        "extensions": [
+            ".exe",
+            ".msi",
+            ".dmg",
+            ".pkg",
+            ".deb",
+            ".appimage",
+            ".apk"
+        ],
+        "keywords": [
+            "setup",
+            "installer"
+        ]
+    }
+}
